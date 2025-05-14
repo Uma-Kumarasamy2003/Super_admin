@@ -17,18 +17,18 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/superadmin" element={<DashboardLayout />}>
-          <Route path="/superadmin/admin" element={<Admin />} />
-          <Route path="/superadmin/cases" element={<Cases />} />
-          <Route path="/superadmin/scancenters" element={<ScanCenters />} />
-          <Route path="/superadmin/doctors" element={<Doctors />} />
-          <Route path="/superadmin/adminfeatures" element={<AdminFeatures />} />
-          <Route path="/superadmin/doctorfeatures" element={<DoctorFeatures />} />
-          <Route path="/superadmin/metadata" element={<MetaData />} />
+        <Route path="/" element={<DashboardLayout />}>
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/cases" element={<Cases />} />
+          <Route path="/scancenters" element={<ScanCenters />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/adminfeatures" element={<AdminFeatures />} />
+          <Route path="/doctorfeatures" element={<DoctorFeatures />} />
+          <Route path="/metadata" element={<MetaData />} />
         </Route>
 
         {/* Route outside the layout */}
-        <Route path="/" element={<SuperAdminLogin />} />
+        <Route path="/login" element={<SuperAdminLogin />} />
       </Routes>
     </Router>
   );

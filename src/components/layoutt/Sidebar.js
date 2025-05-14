@@ -20,13 +20,13 @@ const Sidebar = ({ toggleSidebar, collapsed }) => {
         {!collapsed && <p className="admin-label">SUPER ADMIN</p>}
       </div>
       <nav className="nav-links">
-        <Link to="/superadmin/admin"><DatabaseFilled /> {!collapsed && <span>Admin</span>}</Link>
-        <Link to="/superadmin/cases"><DatabaseFilled /> {!collapsed && <span>Cases</span>}</Link>
-        <Link to="/superadmin/scancenters"><MedicineBoxOutlined /> {!collapsed && <span>Scan Centers</span>}</Link>
-        <Link to="/superadmin/doctors"><UsergroupDeleteOutlined /> {!collapsed && <span>Doctors</span>}</Link>
-        <Link to="/superadmin/adminfeatures"><UsergroupDeleteOutlined /> {!collapsed && <span>Admin Features</span>}</Link>
-        <Link to="/superadmin/doctorfeatures"><UsergroupDeleteOutlined /> {!collapsed && <span>Doctor Features</span>}</Link>
-        <Link to="/superadmin/metadata"><UsergroupDeleteOutlined /> {!collapsed && <span>Meta Data</span>}</Link>
+        <Link to="/admin"><DatabaseFilled /> {!collapsed && <span>Admin</span>}</Link>
+        <Link to="/cases"><DatabaseFilled /> {!collapsed && <span>Cases</span>}</Link>
+        <Link to="/scancenters"><MedicineBoxOutlined /> {!collapsed && <span>Scan Centers</span>}</Link>
+        <Link to="/doctors"><UsergroupDeleteOutlined /> {!collapsed && <span>Doctors</span>}</Link>
+        <Link to="/adminfeatures"><UsergroupDeleteOutlined /> {!collapsed && <span>Admin Features</span>}</Link>
+        <Link to="/doctorfeatures"><UsergroupDeleteOutlined /> {!collapsed && <span>Doctor Features</span>}</Link>
+        <Link to="/metadata"><UsergroupDeleteOutlined /> {!collapsed && <span>Meta Data</span>}</Link>
       </nav>
     </div>
   );

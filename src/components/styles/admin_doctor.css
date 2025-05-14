@@ -1,0 +1,115 @@
+.admin-container {
+  background-color: #fff;
+  padding: 1rem 2rem 2rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-left: 2px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.admin-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.add-admin-btn {
+  background-color: #085cda;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 540;
+  transition: background-color 0.3s;
+}
+
+.add-admin-btn:hover {
+  background-color: #003eaa;
+}
+
+
+.modal h3 {
+  margin-bottom: 2rem;
+  color: #085cda;
+  font-size: 1.25rem;
+}
+
+/* Modal Action Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.modal-buttons button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #085cda;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.5s;
+}
+
+.modal-buttons button:hover {
+  background-color: #003eaa;
+}
+/* Grid layout for the modal form */
+.form-grid {
+  display: grid;
+  margin-right: 40px;
+  margin-left: 20px;
+  grid-template-columns: repeat(2, 1fr); /* two columns */
+  gap: 20px 40px; /* 20px row-gap, 30px column-gap */
+ 
+}
+
+.form-group {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 2px;
+  font-size: 14px;
+  color: #767575;
+}
+.form-group input {
+  padding: 10px 12px !important; /* 12px left/right padding */
+  font-size: 14px !important;
+  border-radius: 4px !important;
+  border: 1px solid #cfd6e1 !important; /* soft gray */
+  background-color: #e4e9f1 !important;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+.form-group .ant-select-selector{
+  font-size: 14px !important;
+  border-radius: 4px !important;
+  border: 1px solid #cfd6e1 !important; /* soft gray */
+  background-color: #e4e9f1 !important;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+.form-group select,input:focus {
+  border-color: #085cda; /* bright blue */
+  box-shadow: 0 0 0 2px rgba(8, 92, 218, 0.2); /* subtle blue glow */
+  background-color: #e6edf8; /* optional: lighter background on focus */
+}
+.modal-overlay .modal{
+  width: 50%;
+}

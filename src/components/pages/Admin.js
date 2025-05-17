@@ -43,7 +43,9 @@ const Admin = () => {
     const updatedAdmin = { ...newAdmin, [name]: value };
 
     if (name === "firstName" || name === "lastName") {
-      updatedAdmin.name = `${updatedAdmin.firstName || ""} ${updatedAdmin.lastName || ""}`.trim();
+      updatedAdmin.name = `${updatedAdmin.firstName || ""} ${
+        updatedAdmin.lastName || ""
+      }`.trim();
     }
 
     setNewAdmin(updatedAdmin);
@@ -95,14 +97,12 @@ const Admin = () => {
       const newId = `ADM${maxIdNumber + 1}`;
       setAdminData([...adminData, { ...newAdmin, id: newId }]);
       message.success("Admin added successfully!");
-      
     } else {
       const updatedData = adminData.map((admin) =>
         admin.id === editingId ? { ...newAdmin, id: editingId } : admin
       );
       setAdminData(updatedData);
       message.success("Admin updated successfully!");
-      
     }
 
     setShowModal(false);
@@ -138,14 +138,17 @@ const Admin = () => {
     const filtered = adminData.filter((admin) => admin.id !== id);
     setAdminData(filtered);
     message.success("Admin added successfully!");
-    
   };
 
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Phone", dataIndex: "phone", key: "phone" },
-    { title: "Specialization", dataIndex: "specialization", key: "specialization" },
+    {
+      title: "Specialization",
+      dataIndex: "specialization",
+      key: "specialization",
+    },
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Address", dataIndex: "address", key: "address" },
     {
@@ -164,7 +167,6 @@ const Admin = () => {
   ];
 
   return (
-    
     <div className="admin-container">
       <div className="admin-header">
         <h2>Admins</h2>
@@ -173,12 +175,14 @@ const Admin = () => {
         </button>
       </div>
 
-      <Table
-        columns={columns}
-        dataSource={adminData}
-        rowKey="id"
-        pagination={{ pageSize: 5 }}
-      />
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          columns={columns}
+          dataSource={adminData}
+          rowKey="id"
+          pagination={{ pageSize: 5 }}
+        />
+      </div>
 
       {showModal && (
         <div className="modal-overlay">

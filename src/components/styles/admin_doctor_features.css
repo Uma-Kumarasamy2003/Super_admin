@@ -6,19 +6,82 @@
   margin-left: 2px;
 }
 
+/* Flex layout for desktop */
 .admin-dropdown-row {
   display: flex;
-  gap: 40px; /* space between each group */
+  gap: 40px;
   align-items: center;
   margin-top: 30px;
+  flex-wrap: wrap; /* Ensure wrap on smaller widths */
 }
 
 .dropdown-group {
   display: flex;
   align-items: center;
-  gap: 10px; /* space between label and dropdown */
+  gap: 10px;
 }
-.admin-features-table{
-    margin-top: 30px;
-    margin-right:20% ;
+
+/* Table container */
+.admin-features-table {
+  margin-top: 30px;
+  margin-right: 20%;
+}
+
+/* Responsive styles for mobile view (≤ 412px) */
+@media (max-width: 412px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  .admin-header h2{
+    font-size: 20px;
+  }
+
+  .admin-dropdown-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .dropdown-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .dropdown-group label {
+    flex-shrink: 0;
+    font-size: 16px;
+    min-width: 90px;
+  }
+
+  
+
+  .admin-features-table {
+    margin-right: 0;
+    overflow-x: auto;
+  }
+
+  .dropdown-group .ant-select {
+    flex-grow: 1;
+    
+  }
+
+  .ant-select {
+    width: 50% !important;
+    
+    
+  }
+
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
 }

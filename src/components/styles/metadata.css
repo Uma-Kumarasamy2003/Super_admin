@@ -153,3 +153,74 @@
 .modal-overlay .modal{
   width: 50%;
 }
+
+/* Responsive Design for 412px Width Screens */
+@media (max-width: 450px) {
+  .meta-container {
+    padding: 1rem;
+    padding-top: 5px;
+    margin: 0;
+  }
+
+  .meta-title {
+    font-size: 18px;
+   
+  }
+
+  .accordion-header {
+    font-size: 15px;
+    padding: 10px 14px;
+  }
+
+  .add-button {
+    width: 30%;
+    margin-top: 15px;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  /* Table responsiveness */
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .ant-table {
+    font-size: 12px;
+    min-width: 360px; /* ensures horizontal scroll if needed */
+  }
+
+  .form-grid {
+    display: flex;
+    gap: 50px;
+    margin: 0px 30px 0px 10px;
+  }
+
+  .form-group input {
+    font-size: 13px;
+    padding: 8px 10px;
+    
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  /* Modal responsiveness */
+  .modal {
+    width: 80% !important;
+    padding: 20px 15px;
+    margin-bottom: 200px;
+  }
+
+  .modal-buttons {
+    display: flex;  
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .modal-buttons button {
+    width: 20%;
+    font-size: 14px;
+    padding: 10px;
+  }
+}

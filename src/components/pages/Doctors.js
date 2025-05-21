@@ -171,7 +171,7 @@ const Doctors = () => {
       />
 
       {showModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay-admin-doctor">
           <div className="modal">
             <h3>{isEditMode ? "Edit Doctor" : "Add Doctor"}</h3>
             <div className="form-grid">

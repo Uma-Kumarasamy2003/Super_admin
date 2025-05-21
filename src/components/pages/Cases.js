@@ -3,14 +3,9 @@ import dayjs from "dayjs";
 import "../styles/cases.css";
 import {
   ReloadOutlined,
-  FilterOutlined,
-  UserAddOutlined,
-  EditOutlined,
-  CloudDownloadOutlined,
-  ShareAltOutlined,
-  EllipsisOutlined,
+  FilterOutlined, EditOutlined, DeleteOutlined
 } from "@ant-design/icons";
-import { Tooltip, Select, DatePicker, Table, Button } from "antd";
+import { Tooltip, Select, DatePicker, Table } from "antd";
 import { Resizable } from "react-resizable";
 
 const { Option } = Select;
@@ -114,31 +109,17 @@ const initialColumns = [
     ),
   },
   {
-    title: "Actions",
-    key: "actions",
-    width: 200,
-    fixed: "right",
-    className: "custom-cell",
-    render: () => (
-      <div style={{ display: "flex", gap: "6px" }}>
-        <Tooltip title="Assign Case">
-          <Button className="btn" icon={<UserAddOutlined />} />
-        </Tooltip>
-        <Tooltip title="Edit Case">
-          <Button className="btn" icon={<EditOutlined />} />
-        </Tooltip>
-        <Tooltip title="Download Case">
-          <Button className="btn" icon={<CloudDownloadOutlined />} />
-        </Tooltip>
-        <Tooltip title="Share Link">
-          <Button className="btn" icon={<ShareAltOutlined />} />
-        </Tooltip>
-        <Tooltip title="More">
-          <Button className="btn" icon={<EllipsisOutlined />} />
-        </Tooltip>
-      </div>
-    ),
-  },
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <span style={{ color: "#085cda", cursor: "pointer", fontSize: "15px" }}>
+          <EditOutlined
+            style={{ marginRight: "10px" }}
+          />
+          <DeleteOutlined  />
+        </span>
+      ),
+    },
 ];
 
 const dataSource = [
@@ -184,14 +165,16 @@ const Cases = () => {
     if (storedScanCentres) setScanCentres(JSON.parse(storedScanCentres));
   }, []);
 
-  const handleResize = (index) => (e, { size }) => {
-    const nextColumns = [...columns];
-    nextColumns[index] = {
-      ...nextColumns[index],
-      width: size.width,
+  const handleResize =
+    (index) =>
+    (e, { size }) => {
+      const nextColumns = [...columns];
+      nextColumns[index] = {
+        ...nextColumns[index],
+        width: size.width,
+      };
+      setColumns(nextColumns);
     };
-    setColumns(nextColumns);
-  };
 
   const mergedColumns = columns.map((col, index) => ({
     ...col,
@@ -251,7 +234,11 @@ const Cases = () => {
         {/* ✅ Dynamic Scan Centre Dropdown */}
         <div className="each_filters">
           <label>Scan Centre</label>
-          <Select className="custom-select" placeholder="Scan Centre" allowClear>
+          <Select
+            className="custom-select"
+            placeholder="Scan Centre"
+            allowClear
+          >
             {scanCentres.map((centre) => (
               <Option key={centre.id} value={centre.name}>
                 {centre.name}
@@ -295,11 +282,19 @@ const Cases = () => {
 
         <div className="each_filters">
           <label>From Date</label>
-          <DatePicker defaultValue={dayjs()} format="DD/MM/YYYY" style={{ width: "100%" }} />
+          <DatePicker
+            defaultValue={dayjs()}
+            format="DD/MM/YYYY"
+            style={{ width: "100%" }}
+          />
         </div>
         <div className="each_filters">
           <label>To Date</label>
-          <DatePicker defaultValue={dayjs()} format="DD/MM/YYYY" style={{ width: "100%" }} />
+          <DatePicker
+            defaultValue={dayjs()}
+            format="DD/MM/YYYY"
+            style={{ width: "100%" }}
+          />
         </div>
       </div>
 
@@ -314,15 +309,27 @@ const Cases = () => {
         columns={mergedColumns}
         dataSource={dataSource}
         scroll={{ x: "max-content" }}
-        pagination={{ pageSize: 10, showSizeChanger: true, pageSizeOptions: ["10", "20", "50"] }}
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "50"],
+        }}
       />
 
       {/* Legend */}
       <div className="legend">
-        <span><span className="dot red" /> Urgent</span>
-        <span><span className="dot orange" /> Critical</span>
-        <span><span className="dot blue" /> Interesting</span>
-        <span><span className="dot green" /> Case Opened</span>
+        <span>
+          <span className="dot red" /> Urgent
+        </span>
+        <span>
+          <span className="dot orange" /> Critical
+        </span>
+        <span>
+          <span className="dot blue" /> Interesting
+        </span>
+        <span>
+          <span className="dot green" /> Case Opened
+        </span>
       </div>
     </div>
   );

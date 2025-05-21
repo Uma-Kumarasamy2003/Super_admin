@@ -198,7 +198,7 @@ const MetaData = () => {
       </div>
 
       {showModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay-metadata">
           <div className="modal">
             <h3>
               {isEditing ? "Edit" : "Add"}{" "}

@@ -97,7 +97,8 @@ const Scancentres = () => {
       <div className="admin-header">
         <h2>Scan Centres</h2>
         <button className="add-admin-btn" onClick={openAddModal}>
-          <PlusOutlined style={{ paddingRight: "5px" }} /> Add Scan Centre
+          <PlusOutlined style={{ paddingRight: "5px" }} />
+          <span>Add Scan Centre</span>
         </button>
       </div>
 
@@ -109,7 +110,7 @@ const Scancentres = () => {
       />
 
       {showModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay-scancentre">
           <div className="modal">
             <h3>{isEditMode ? "Edit Scan Centre" : "Add Scan Centre"}</h3>
             <div className="form-grid">

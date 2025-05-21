@@ -26,6 +26,15 @@
   margin-top: 30px;
   margin-right: 20%;
 }
+.adminfeature-form{
+  margin-top: 20px;
+ 
+}
+.adminfeature-modal{
+  margin-top: 40px;
+  
+ 
+}
 
 /* Responsive styles for mobile view (≤ 412px) */
 @media (max-width: 412px) {
@@ -73,7 +82,6 @@
   .ant-select {
     width: 50% !important;
     
-    
   }
 
   .ant-table {
@@ -84,4 +92,5 @@
   .ant-table-wrapper {
     overflow-x: auto;
   }
+  
 }

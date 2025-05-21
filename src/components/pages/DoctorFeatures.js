@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Table } from "antd";
+import { Select, Table, Button, Form, Modal, message } from "antd";
 import "../styles/admin_doctor_features.css";
 
 const { Option } = Select;
@@ -10,50 +10,40 @@ const DoctorFeatures = () => {
   const [selectedAdminId, setSelectedAdminId] = useState(null);
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
   const [features, setFeatures] = useState([]);
-  const [metadata, setMetadata] = useState({
-    features: [],
-  });
+  const [metadata, setMetadata] = useState({ features: [] });
 
-  // Load metadata (features) from localStorage
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
   useEffect(() => {
     const storedFeatures = JSON.parse(localStorage.getItem("features") || "[]");
     setMetadata((prev) => ({ ...prev, features: storedFeatures }));
   }, []);
 
-  // Load admin and doctor data from localStorage
   useEffect(() => {
     const storedAdmins = localStorage.getItem("adminData");
     const storedDoctors = localStorage.getItem("doctorData");
 
-    if (storedAdmins) {
-      setAdminData(JSON.parse(storedAdmins));
-    }
-    if (storedDoctors) {
-      setDoctorData(JSON.parse(storedDoctors));
-    }
+    if (storedAdmins) setAdminData(JSON.parse(storedAdmins));
+    if (storedDoctors) setDoctorData(JSON.parse(storedDoctors));
   }, []);
 
   const handleAdminChange = (adminId) => {
     setSelectedAdminId(adminId);
-    setSelectedDoctorId(null); // Reset doctor selection
-
-    // Clear features table when switching admin
+    setSelectedDoctorId(null);
     setFeatures([]);
   };
 
   const handleDoctorChange = (doctorId) => {
     setSelectedDoctorId(doctorId);
+    const selectedDoctor = doctorData.find((d) => d.id === doctorId);
+    const selectedFeatures = selectedDoctor ? selectedDoctor.features || [] : [];
 
-    const selectedDoctor = doctorData.find((doctor) => doctor.id === doctorId);
-
-    const selectedFeatures = selectedDoctor ? selectedDoctor.features : [];
     const mappedFeatures = selectedFeatures.map((featureName) => {
-      const feature = metadata.features.find(
-        (metadataFeature) => metadataFeature.name === featureName
-      );
+      const feature = metadata.features.find((f) => f.name === featureName);
       return {
         featureId: feature ? feature.id : "N/A",
-        featureName: featureName,
+        featureName,
       };
     });
 
@@ -65,18 +55,49 @@ const DoctorFeatures = () => {
     return admin ? admin.name : null;
   };
 
-  // Columns for the features table
+  const showModal = () => {
+    setSelectedFeature(null);
+    setIsModalVisible(true);
+  };
+
+  const getUnassignedFeatures = () => {
+    const assignedFeatureNames = features.map((f) => f.featureName);
+    return metadata.features.filter(
+      (feature) => !assignedFeatureNames.includes(feature.name)
+    );
+  };
+
+  const handleAddFeature = () => {
+    if (!selectedFeature) {
+      message.warning("Please select a feature.");
+      return;
+    }
+
+    const featureObj = metadata.features.find(f => f.id === selectedFeature);
+    if (!featureObj) {
+      message.error("Selected feature not found.");
+      return;
+    }
+
+    const updatedDoctors = doctorData.map((doctor) => {
+      if (doctor.id === selectedDoctorId) {
+        const updatedFeatures = [...(doctor.features || []), featureObj.name];
+        return { ...doctor, features: updatedFeatures };
+      }
+      return doctor;
+    });
+
+    setDoctorData(updatedDoctors);
+    localStorage.setItem("doctorData", JSON.stringify(updatedDoctors));
+
+    setFeatures((prev) => [...prev, { featureId: featureObj.id, featureName: featureObj.name }]);
+    setIsModalVisible(false);
+    message.success("Feature added successfully.");
+  };
+
   const columns = [
-    {
-      title: "Feature ID",
-      dataIndex: "featureId",
-      key: "featureId",
-    },
-    {
-      title: "Feature Name",
-      dataIndex: "featureName",
-      key: "featureName",
-    },
+    { title: "Feature ID", dataIndex: "featureId", key: "featureId" },
+    { title: "Feature Name", dataIndex: "featureName", key: "featureName" },
   ];
 
   return (
@@ -95,9 +116,7 @@ const DoctorFeatures = () => {
             onChange={handleAdminChange}
           >
             {adminData.map((admin) => (
-              <Option key={admin.id} value={admin.id}>
-                {admin.name}
-              </Option>
+              <Option key={admin.id} value={admin.id}>{admin.name}</Option>
             ))}
           </Select>
         </div>
@@ -112,9 +131,7 @@ const DoctorFeatures = () => {
             disabled={!selectedAdminId}
           >
             {doctorData
-              .filter(
-                (doctor) => doctor.adminName === getSelectedAdminName()
-              )
+              .filter((doctor) => doctor.adminName === getSelectedAdminName())
               .map((doctor) => (
                 <Option key={doctor.id} value={doctor.id}>
                   {doctor.name}
@@ -127,6 +144,37 @@ const DoctorFeatures = () => {
       <div className="admin-features-table">
         <Table columns={columns} dataSource={features} rowKey="featureId" pagination={false} />
       </div>
+
+      <div style={{ marginTop: 20 }}>
+        <Button type="primary" onClick={showModal} disabled={!selectedDoctorId}>
+          Add Feature
+        </Button>
+      </div>
+
+      <Modal
+        title="Add Feature"
+        open={isModalVisible}
+        onOk={handleAddFeature}
+        onCancel={() => setIsModalVisible(false)}
+        okText="Add"
+        className="adminfeature-modal"
+      >
+        <Form layout="vertical" className="adminfeature-form">
+          <Form.Item label="Select Feature">
+            <Select
+              placeholder="Select feature"
+              value={selectedFeature}
+              onChange={(value) => setSelectedFeature(value)}
+            >
+              {getUnassignedFeatures().map((feature) => (
+                <Option key={feature.id} value={feature.id}>
+                  {feature.id} - {feature.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

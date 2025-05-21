@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Table } from "antd";
+import { Select, Table, Button, Form, Modal, message } from "antd";
 import "../styles/admin_doctor_features.css";
 
 const { Option } = Select;
@@ -9,14 +9,15 @@ const AdminFeatures = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [selectedName, setSelectedName] = useState(null);
   const [features, setFeatures] = useState([]);
-  const [metadata, setMetadata] = useState({
-    features: [],
-  });
+  const [metadata, setMetadata] = useState({ features: [] });
 
-  // Load metadata (features) from localStorage
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
+  // Load metadata from localStorage
   useEffect(() => {
     const storedFeatures = JSON.parse(localStorage.getItem("features") || "[]");
-    setMetadata((prev) => ({ ...prev, features: storedFeatures }));
+    setMetadata({ features: storedFeatures });
   }, []);
 
   // Load admin data from localStorage
@@ -27,39 +28,78 @@ const AdminFeatures = () => {
     }
   }, []);
 
+  // Handle admin selection
   const handleIdChange = (value) => {
     setSelectedId(value);
     const selectedAdmin = adminData.find((admin) => admin.id === value);
     setSelectedName(selectedAdmin ? selectedAdmin.name : null);
 
-    // Map feature names to feature IDs
-    const selectedFeatures = selectedAdmin ? selectedAdmin.features : [];
+    const selectedFeatures = selectedAdmin ? selectedAdmin.features || [] : [];
     const mappedFeatures = selectedFeatures.map((featureName) => {
-      const feature = metadata.features.find(
-        (metadataFeature) => metadataFeature.name === featureName
-      );
+      const feature = metadata.features.find((f) => f.name === featureName);
       return {
-        featureId: feature ? feature.id : "N/A", // Default to "N/A" if no feature match
-        featureName: featureName,
+        featureId: feature ? feature.id : "N/A",
+        featureName,
       };
     });
-
-    setFeatures(mappedFeatures); // Set features with ids
+    setFeatures(mappedFeatures);
   };
 
-  // Columns for the features table
+  // Open modal
+  const showModal = () => {
+    setSelectedFeature(null);
+    setIsModalVisible(true);
+  };
+
+  // Add feature to admin
+  const handleAddFeature = () => {
+    if (!selectedFeature) {
+      message.warning("Please select a feature.");
+      return;
+    }
+
+    const featureObj = metadata.features.find(f => f.id === selectedFeature);
+    if (!featureObj) {
+      message.error("Selected feature not found.");
+      return;
+    }
+
+    const updatedAdmins = adminData.map((admin) => {
+      if (admin.id === selectedId) {
+        const updatedFeatures = [...(admin.features || []), featureObj.name];
+        return { ...admin, features: updatedFeatures };
+      }
+      return admin;
+    });
+
+    setAdminData(updatedAdmins);
+    localStorage.setItem("adminData", JSON.stringify(updatedAdmins));
+
+    setFeatures((prev) => [...prev, { featureId: featureObj.id, featureName: featureObj.name }]);
+    setIsModalVisible(false);
+    message.success("Feature added successfully.");
+  };
+
   const columns = [
     {
-      title: 'Feature ID',
-      dataIndex: 'featureId',
-      key: 'featureId',
+      title: "Feature ID",
+      dataIndex: "featureId",
+      key: "featureId",
     },
     {
-      title: 'Feature Name',
-      dataIndex: 'featureName',
-      key: 'featureName',
+      title: "Feature Name",
+      dataIndex: "featureName",
+      key: "featureName",
     },
   ];
+
+  // Filter features to exclude already added ones
+  const getUnassignedFeatures = () => {
+    const assignedFeatureNames = features.map((f) => f.featureName);
+    return metadata.features.filter(
+      (feature) => !assignedFeatureNames.includes(feature.name)
+    );
+  };
 
   return (
     <div className="admin-container">
@@ -90,19 +130,52 @@ const AdminFeatures = () => {
             placeholder="Admin Name"
             style={{ width: 200 }}
             value={selectedName}
-            
+            disabled
           >
-            {selectedName && (
-              <Option value={selectedName}>{selectedName}</Option>
-            )}
+            {selectedName && <Option value={selectedName}>{selectedName}</Option>}
           </Select>
         </div>
       </div>
 
-      {/* Features Table */}
       <div className="admin-features-table">
-        <Table columns={columns} dataSource={features} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={features}
+          rowKey="featureId"
+          pagination={false}
+        />
       </div>
+
+      <div style={{ marginTop: 20 }}>
+        <Button type="primary" onClick={showModal} disabled={!selectedId}>
+          Add Feature
+        </Button>
+      </div>
+
+      <Modal
+        title="Add Feature"
+        open={isModalVisible}
+        onOk={handleAddFeature}
+        onCancel={() => setIsModalVisible(false)}
+        okText="Add"
+        className="adminfeature-modal"
+      >
+        <Form layout="vertical" className="adminfeature-form">
+          <Form.Item label="Select Feature">
+            <Select
+              placeholder="Select feature"
+              value={selectedFeature}
+              onChange={(value) => setSelectedFeature(value)}
+            >
+              {getUnassignedFeatures().map((feature) => (
+                <Option key={feature.id} value={feature.id}>
+                  {feature.id} - {feature.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

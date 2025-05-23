@@ -193,3 +193,57 @@
   background-color: #0057ff;
   color: white;
 }
+
+/* Grid layout for form with two columns */
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+  gap:20px; /* Space between items */
+}
+
+/* Make each form item stretch full width inside its grid cell */
+.edit-form-grid .ant-form-item {
+  margin-bottom: 0; /* Remove extra bottom margin */
+  
+  
+}
+
+/* Ensure input/select elements take full width */
+.edit-form-grid .ant-input,
+.edit-form-grid .ant-select,
+.edit-form-grid .ant-picker {
+  width: 100%;
+}
+
+/* Make the final submit button span both columns */
+.edit-form-grid .ant-form-item:last-child {
+  grid-column: span 2;
+  margin-top: 16px;
+}
+
+.edit-modal{
+  margin-left: 25%;
+}
+/* Increase modal width and height */
+.edit-modal .ant-modal-content {
+  width: 1000px;         /* Adjust as needed */
+  max-width: 90vw;      /* Optional: responsive limit */
+  height: auto;         /* Or set fixed height like 600px */
+  max-height: 90vh;     /* Keep it responsive */
+  padding: 24px;
+  overflow: auto;       /* Enables scroll if content overflows */
+  margin: 0 auto;
+  
+}
+
+/* You can also override internal modal width */
+.edit-modal .ant-modal {
+  width: 800px !important;
+}
+
+/* Increase form height if needed */
+.edit-modal .ant-form {
+  min-height: 400px;     /* Set your preferred height */
+}
+
+

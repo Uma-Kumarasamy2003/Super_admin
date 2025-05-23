@@ -3,9 +3,21 @@ import dayjs from "dayjs";
 import "../styles/cases.css";
 import {
   ReloadOutlined,
-  FilterOutlined, EditOutlined, DeleteOutlined
+  FilterOutlined,
+  EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
-import { Tooltip, Select, DatePicker, Table } from "antd";
+import {
+  Tooltip,
+  Select,
+  DatePicker,
+  Table,
+  Modal,
+  Form,
+  Input,
+  Button,
+  message,
+} from "antd";
 import { Resizable } from "react-resizable";
 
 const { Option } = Select;
@@ -108,21 +120,9 @@ const initialColumns = [
       <span className={`status ${status.toLowerCase()}`}>{status}</span>
     ),
   },
-  {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <span style={{ color: "#085cda", cursor: "pointer", fontSize: "15px" }}>
-          <EditOutlined
-            style={{ marginRight: "10px" }}
-          />
-          <DeleteOutlined  />
-        </span>
-      ),
-    },
 ];
 
-const dataSource = [
+const initialDataSource = [
   {
     key: "1",
     tags: "green",
@@ -136,7 +136,7 @@ const dataSource = [
     reportedTime: "NA",
     status: "Assigned",
   },
-  // Add more mock rows as needed
+  // Add more rows here if needed
 ];
 
 const Cases = () => {
@@ -145,6 +145,16 @@ const Cases = () => {
   const [scanTypes, setScanTypes] = useState([]);
   const [bodyParts, setBodyParts] = useState([]);
   const [scanCentres, setScanCentres] = useState([]);
+  const [filtersVisible, setFiltersVisible] = useState(true);
+  const [dataSource, setDataSource] = useState(initialDataSource);
+  const [loading, setLoading] = useState(false);
+
+  // For modal form control
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
+
+  // Antd form instance
+  const [form] = Form.useForm();
 
   useEffect(() => {
     // Load doctor names from localStorage
@@ -176,7 +186,27 @@ const Cases = () => {
       setColumns(nextColumns);
     };
 
-  const mergedColumns = columns.map((col, index) => ({
+  const mergedColumns = [
+    ...columns,
+    {
+      title: "Action",
+      key: "action",
+      fixed: 'right',
+      width: 100,
+      render: (_, record) => (
+        <span style={{ color: "#085cda", cursor: "pointer", fontSize: "15px" }}>
+          <EditOutlined
+            style={{ marginRight: "10px" }}
+            onClick={() => onEdit(record)}
+          />
+          <DeleteOutlined
+            onClick={() => onDelete(record.key)}
+            style={{ color: "red" }}
+          />
+        </span>
+      ),
+    },
+  ].map((col, index) => ({
     ...col,
     onHeaderCell: (column) => ({
       width: column.width,
@@ -184,123 +214,188 @@ const Cases = () => {
     }),
   }));
 
+  // Toggle filter panel visibility
+  const toggleFilters = () => {
+    setFiltersVisible(!filtersVisible);
+  };
+
+  // Simulate fetching new data on reload
+  const syncCases = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setDataSource((prevData) => [...prevData].reverse());
+      setLoading(false);
+    }, 1000);
+  };
+
+  // Open modal and set editing record
+  const onEdit = (record) => {
+    setEditingRecord(record);
+    form.setFieldsValue({
+      ...record,
+      dateUploaded: record.dateUploaded, // string here, could parse if needed
+    });
+    setIsModalVisible(true);
+  };
+
+  // Delete handler (simple example)
+  const onDelete = (key) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this record?",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        setDataSource((prev) => prev.filter((item) => item.key !== key));
+        message.success("Deleted successfully");
+      },
+    });
+  };
+
+  // Modal form submission handler
+  const onFinish = (values) => {
+    const updatedData = dataSource.map((item) => {
+      if (item.key === editingRecord.key) {
+        return { ...item, ...values };
+      }
+      return item;
+    });
+    setDataSource(updatedData);
+    setIsModalVisible(false);
+    message.success("Record updated successfully");
+    setEditingRecord(null);
+  };
+
+  // Modal cancel handler
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setEditingRecord(null);
+  };
+
   return (
     <div className="cases-container">
       <div className="cases-title">
         <h2>
           Cases
-          <Tooltip title="Hide Filters">
-            <FilterOutlined className="icon-button" />
+          <Tooltip title={filtersVisible ? "Hide Filters" : "Show Filters"}>
+            <FilterOutlined
+              className="icon-button"
+              onClick={toggleFilters}
+              style={{ cursor: "pointer", marginLeft: 10 }}
+            />
           </Tooltip>
           <Tooltip title="Sync Cases">
-            <ReloadOutlined className="icon-button" />
+            <ReloadOutlined
+              className="icon-button"
+              onClick={syncCases}
+              style={{ marginLeft: 10 }}
+            />
           </Tooltip>
         </h2>
       </div>
 
-      {/* Filters */}
-      <div className="filters">
-        {[{ label: "Patient ID" }, { label: "Patient Name" }].map(
-          ({ label }) => (
-            <div className="each_filters" key={label}>
-              <label>{label}</label>
-              <input type="text" placeholder={label} />
-            </div>
-          )
-        )}
+      {filtersVisible && (
+        <div className="filters">
+          {[{ label: "Patient ID" }, { label: "Patient Name" }].map(
+            ({ label }) => (
+              <div className="each_filters" key={label}>
+                <label>{label}</label>
+                <input type="text" placeholder={label} />
+              </div>
+            )
+          )}
 
-        <div className="each_filters">
-          <label>Scan Type</label>
-          <Select className="custom-select" placeholder="Scan Type" allowClear>
-            {scanTypes.map((scan) => (
-              <Option key={scan.id} value={scan.name}>
-                {scan.name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Scan Type</label>
+            <Select className="custom-select" placeholder="Scan Type" allowClear>
+              {scanTypes.map((scan) => (
+                <Option key={scan.id} value={scan.name}>
+                  {scan.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
 
-        <div className="each_filters">
-          <label>Body Part</label>
-          <Select className="custom-select" placeholder="Body Part" allowClear>
-            {bodyParts.map((part) => (
-              <Option key={part.id} value={part.name}>
-                {part.name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Body Part</label>
+            <Select className="custom-select" placeholder="Body Part" allowClear>
+              {bodyParts.map((part) => (
+                <Option key={part.id} value={part.name}>
+                  {part.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
 
-        {/* ✅ Dynamic Scan Centre Dropdown */}
-        <div className="each_filters">
-          <label>Scan Centre</label>
-          <Select
-            className="custom-select"
-            placeholder="Scan Centre"
-            allowClear
-          >
-            {scanCentres.map((centre) => (
-              <Option key={centre.id} value={centre.name}>
-                {centre.name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Scan Centre</label>
+            <Select
+              className="custom-select"
+              placeholder="Scan Centre"
+              allowClear
+            >
+              {scanCentres.map((centre) => (
+                <Option key={centre.id} value={centre.name}>
+                  {centre.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
 
-        {/* ✅ Dynamic Doctor Dropdown */}
-        <div className="each_filters">
-          <label>Doctor</label>
-          <Select className="custom-select" placeholder="Doctor" allowClear>
-            {doctorNames.map((name) => (
-              <Option key={name} value={name}>
-                {name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Doctor</label>
+            <Select className="custom-select" placeholder="Doctor" allowClear>
+              {doctorNames.map((name) => (
+                <Option key={name} value={name}>
+                  {name}
+                </Option>
+              ))}
+            </Select>
+          </div>
 
-        <div className="each_filters">
-          <label>Status</label>
-          <Select className="custom-select" placeholder="Status" allowClear>
-            <Option value="Assigned">Assigned</Option>
-            <Option value="Unassigned">Unassigned</Option>
-            <Option value="Reported">Reported</Option>
-            <Option value="To be approved">To be approved</Option>
-            <Option value="Report Pending">Report Pending</Option>
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Status</label>
+            <Select className="custom-select" placeholder="Status" allowClear>
+              <Option value="Assigned">Assigned</Option>
+              <Option value="Unassigned">Unassigned</Option>
+              <Option value="Reported">Reported</Option>
+              <Option value="To be approved">To be approved</Option>
+              <Option value="Report Pending">Report Pending</Option>
+            </Select>
+          </div>
 
-        <div className="each_filters">
-          <label>Tag</label>
-          <Select className="custom-select" placeholder="Tag" allowClear>
-            <Option value="urgent">Urgent</Option>
-            <Option value="critical">Critical</Option>
-            <Option value="interesting">Interesting</Option>
-            <Option value="case_opened">Case Opened</Option>
-          </Select>
-        </div>
+          <div className="each_filters">
+            <label>Tag</label>
+            <Select className="custom-select" placeholder="Tag" allowClear>
+              <Option value="urgent">Urgent</Option>
+              <Option value="critical">Critical</Option>
+              <Option value="interesting">Interesting</Option>
+              <Option value="case_opened">Case Opened</Option>
+            </Select>
+          </div>
 
-        <div className="each_filters">
-          <label>From Date</label>
-          <DatePicker
-            defaultValue={dayjs()}
-            format="DD/MM/YYYY"
-            style={{ width: "100%" }}
-          />
+          <div className="each_filters">
+            <label>From Date</label>
+            <DatePicker
+              defaultValue={dayjs()}
+              format="DD/MM/YYYY"
+              style={{ width: "100%" }}
+            />
+          </div>
+          <div className="each_filters">
+            <label>To Date</label>
+            <DatePicker
+              defaultValue={dayjs()}
+              format="DD/MM/YYYY"
+              style={{ width: "100%" }}
+            />
+          </div>
         </div>
-        <div className="each_filters">
-          <label>To Date</label>
-          <DatePicker
-            defaultValue={dayjs()}
-            format="DD/MM/YYYY"
-            style={{ width: "100%" }}
-          />
-        </div>
-      </div>
+      )}
 
-      {/* Table */}
       <Table
         bordered
+        loading={loading}
         components={{
           header: {
             cell: ResizableTitle,
@@ -316,21 +411,119 @@ const Cases = () => {
         }}
       />
 
-      {/* Legend */}
-      <div className="legend">
-        <span>
-          <span className="dot red" /> Urgent
-        </span>
-        <span>
-          <span className="dot orange" /> Critical
-        </span>
-        <span>
-          <span className="dot blue" /> Interesting
-        </span>
-        <span>
-          <span className="dot green" /> Case Opened
-        </span>
-      </div>
+      <Modal
+        title="Edit Case"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        destroyOnClose
+        className="edit-modal"
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={editingRecord || {}}
+          className="edit-form-grid"  
+        >
+          <Form.Item
+            name="tags"
+            label="Tags"
+            rules={[{ required: true, message: "Please input tag!" }]}
+          >
+            <Select>
+              <Option value="green">Case Opened</Option>
+              <Option value="red">Urgent</Option>
+              <Option value="orange">Critical</Option>
+              <Option value="blue">Interesting</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="patientId"
+            label="Patient ID"
+            rules={[{ required: true, message: "Please input Patient ID!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="patientName"
+            label="Patient Name"
+            rules={[{ required: true, message: "Please input Patient Name!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="study"
+            label="Study"
+            rules={[{ required: true, message: "Please input Study!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="scanCenter"
+            label="Scan Center"
+            rules={[{ required: true, message: "Please input Scan Center!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="dateUploaded"
+            label="Date Uploaded"
+            rules={[{ required: true, message: "Please input Date Uploaded!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="doctor"
+            label="Assigned Doctor"
+            rules={[{ required: true, message: "Please input Assigned Doctor!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="dueTime"
+            label="Due Time"
+            rules={[{ required: true, message: "Please input Due Time!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="reportedTime"
+            label="Reported Time"
+            rules={[{ required: true, message: "Please input Reported Time!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="status"
+            label="Status"
+            rules={[{ required: true, message: "Please input Status!" }]}
+          >
+            <Select>
+              <Option value="Assigned">Assigned</Option>
+              <Option value="Unassigned">Unassigned</Option>
+              <Option value="Reported">Reported</Option>
+              <Option value="To be approved">To be approved</Option>
+              <Option value="Report Pending">Report Pending</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Save Changes
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

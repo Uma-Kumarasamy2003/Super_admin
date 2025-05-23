@@ -191,7 +191,7 @@ const Cases = () => {
     {
       title: "Action",
       key: "action",
-      fixed: 'right',
+      fixed: "right",
       width: 100,
       render: (_, record) => (
         <span style={{ color: "#085cda", cursor: "pointer", fontSize: "15px" }}>
@@ -307,7 +307,11 @@ const Cases = () => {
 
           <div className="each_filters">
             <label>Scan Type</label>
-            <Select className="custom-select" placeholder="Scan Type" allowClear>
+            <Select
+              className="custom-select"
+              placeholder="Scan Type"
+              allowClear
+            >
               {scanTypes.map((scan) => (
                 <Option key={scan.id} value={scan.name}>
                   {scan.name}
@@ -318,7 +322,11 @@ const Cases = () => {
 
           <div className="each_filters">
             <label>Body Part</label>
-            <Select className="custom-select" placeholder="Body Part" allowClear>
+            <Select
+              className="custom-select"
+              placeholder="Body Part"
+              allowClear
+            >
               {bodyParts.map((part) => (
                 <Option key={part.id} value={part.name}>
                   {part.name}
@@ -424,7 +432,7 @@ const Cases = () => {
           layout="vertical"
           onFinish={onFinish}
           initialValues={editingRecord || {}}
-          className="edit-form-grid"  
+          className="edit-form-grid"
         >
           <Form.Item
             name="tags"
@@ -482,7 +490,9 @@ const Cases = () => {
           <Form.Item
             name="doctor"
             label="Assigned Doctor"
-            rules={[{ required: true, message: "Please input Assigned Doctor!" }]}
+            rules={[
+              { required: true, message: "Please input Assigned Doctor!" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -518,9 +528,15 @@ const Cases = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Save Changes
-            </Button>
+            <div className="update-button">
+              <Button
+                type="primary"
+                htmlType="submit"
+                
+              >
+                Update
+              </Button>
+            </div>
           </Form.Item>
         </Form>
       </Modal>

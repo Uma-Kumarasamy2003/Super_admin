@@ -224,6 +224,13 @@
 .edit-modal{
   margin-left: 25%;
 }
+
+.edit-modal .ant-modal-title{
+  color: #085cda;
+  font-size: 20px;
+  font-weight: 700;
+}
+
 /* Increase modal width and height */
 .edit-modal .ant-modal-content {
   width: 1000px;         /* Adjust as needed */
@@ -241,9 +248,11 @@
   width: 800px !important;
 }
 
-/* Increase form height if needed */
-.edit-modal .ant-form {
-  min-height: 400px;     /* Set your preferred height */
+.update-button {
+  display: flex;
+  justify-content: flex-end; /* Aligns the button to the right */
+ 
 }
+
 
 

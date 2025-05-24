@@ -174,5 +174,15 @@
   border-left: 2px solid #77797d; /* visible blue border */
 }
 
+@media (max-width: 412px) {
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-
+  .each_filters input,
+  .each_filters .custom-select,
+  .each_filters .ant-picker /* for DatePicker */ {
+    width: 100px !important;
+  }
+}

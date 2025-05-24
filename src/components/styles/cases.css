@@ -1,4 +1,3 @@
-
 .cases-container {
   background-color: #fff;
   padding: 1rem 2rem 2rem 2rem;
@@ -106,24 +105,27 @@
   border-radius: 50%;
 }
 
-.green { background-color: green; }
-.red { background-color: red; }
-.orange { background-color: orange; }
-.blue { background-color: blue; }
+.green {
+  background-color: green;
+}
+.red {
+  background-color: red;
+}
+.orange {
+  background-color: orange;
+}
+.blue {
+  background-color: blue;
+}
 
-.status.assigned { color: orange; }
-.status.reported { color: green; }
-.status.unassigned { color: red; }
-
-.actions button {
-  background: #0057ff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  margin-right: 4px;
-  padding: 4px 6px;
-  cursor: pointer;
-  font-size: 14px;
+.status.assigned {
+  color: orange;
+}
+.status.reported {
+  color: green;
+}
+.status.unassigned {
+  color: red;
 }
 
 .legend {
@@ -138,20 +140,6 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
-}
-
-.page-buttons button {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.page-buttons .active {
-  background: #0057ff;
-  color: white;
-  border-color: #0057ff;
 }
 
 .react-resizable {
@@ -174,9 +162,7 @@
   font-weight: normal;
   font-size: 13px;
   color: #333;
-  
 }
-
 
 /* Resizable column area */
 .react-resizable {
@@ -185,74 +171,7 @@
 }
 
 .react-resizable-handle {
-  border-left: 2px solid #77797d; /* visible blue border */ 
-  
-}
-
-.btn{
-  background-color: #0057ff;
-  color: white;
-}
-
-/* Grid layout for form with two columns */
-.edit-form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
-  gap:20px; /* Space between items */
-}
-
-/* Make each form item stretch full width inside its grid cell */
-.edit-form-grid .ant-form-item {
-  margin-bottom: 0; /* Remove extra bottom margin */
-  
-  
-}
-
-/* Ensure input/select elements take full width */
-.edit-form-grid .ant-input,
-.edit-form-grid .ant-select,
-.edit-form-grid .ant-picker {
-  width: 100%;
-}
-
-/* Make the final submit button span both columns */
-.edit-form-grid .ant-form-item:last-child {
-  grid-column: span 2;
-  margin-top: 16px;
-}
-
-.edit-modal{
-  margin-left: 25%;
-}
-
-.edit-modal .ant-modal-title{
-  color: #085cda;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* Increase modal width and height */
-.edit-modal .ant-modal-content {
-  width: 1000px;         /* Adjust as needed */
-  max-width: 90vw;      /* Optional: responsive limit */
-  height: auto;         /* Or set fixed height like 600px */
-  max-height: 90vh;     /* Keep it responsive */
-  padding: 24px;
-  overflow: auto;       /* Enables scroll if content overflows */
-  margin: 0 auto;
-  
-}
-
-/* You can also override internal modal width */
-.edit-modal .ant-modal {
-  width: 800px !important;
-}
-
-.update-button {
-  display: flex;
-  justify-content: flex-end; /* Aligns the button to the right */
- 
+  border-left: 2px solid #77797d; /* visible blue border */
 }
 
 

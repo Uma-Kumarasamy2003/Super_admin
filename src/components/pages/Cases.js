@@ -201,7 +201,7 @@ const Cases = () => {
           />
           <DeleteOutlined
             onClick={() => onDelete(record.key)}
-            style={{ color: "red" }}
+            
           />
         </span>
       ),
@@ -425,7 +425,8 @@ const Cases = () => {
         onCancel={handleCancel}
         footer={null}
         destroyOnClose
-        className="edit-modal"
+        className="admin-modal"
+        width={700} 
         
       >
         <Form
@@ -433,13 +434,14 @@ const Cases = () => {
           layout="vertical"
           onFinish={onFinish}
           initialValues={editingRecord || {}}
-          className="edit-form-grid"
+          className="admin-form"
           requiredMark={false}
         >
           <Form.Item
             name="tags"
             label="Tags"
             rules={[{ required: true, message: "Please input tag!" }]}
+            className="features-field"
           >
             <Select>
               <Option value="green">Case Opened</Option>
@@ -519,6 +521,7 @@ const Cases = () => {
             name="status"
             label="Status"
             rules={[{ required: true, message: "Please input Status!" }]}
+            className="features-field"
           >
             <Select>
               <Option value="Assigned">Assigned</Option>
@@ -530,7 +533,7 @@ const Cases = () => {
           </Form.Item>
 
           <Form.Item>
-            <div className="update-button">
+            <div className="admin-form-button">
               <Button type="primary" htmlType="submit">
                 Update
               </Button>

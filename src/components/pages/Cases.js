@@ -199,10 +199,7 @@ const Cases = () => {
             style={{ marginRight: "10px" }}
             onClick={() => onEdit(record)}
           />
-          <DeleteOutlined
-            onClick={() => onDelete(record.key)}
-            
-          />
+          <DeleteOutlined onClick={() => onDelete(record.key)} />
         </span>
       ),
     },
@@ -426,8 +423,7 @@ const Cases = () => {
         footer={null}
         destroyOnClose
         className="admin-modal"
-        width={700} 
-        
+        width={700}
       >
         <Form
           form={form}

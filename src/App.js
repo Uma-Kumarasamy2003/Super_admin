@@ -1,17 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import './index.css';
+import "./index.css";
 
-import Admin from './components/pages/Admin';
-import Cases from './components/pages/Cases';
-import ScanCenters from './components/pages/Scancenters';
-import Doctors from './components/pages/Doctors';
-import AdminFeatures from './components/pages/AdminFeatures';
-import DoctorFeatures from './components/pages/DoctorFeatures';
-import MetaData from './components/pages/MetaData';
-import SuperAdminLogin from './components/SuperAdminLogin';
-import DashboardLayout from './components/layoutt/DashboardLayout';
+import Admin from "./components/pages/Admin";
+import Cases from "./components/pages/Cases";
+import ScanCenters from "./components/pages/Scancenters";
+import Doctors from "./components/pages/Doctors";
+import AdminFeatures from "./components/pages/AdminFeatures";
+import DoctorFeatures from "./components/pages/DoctorFeatures";
+import MetaData from "./components/pages/MetaData";
+import SuperAdminLogin from "./components/SuperAdminLogin";
+import DashboardLayout from "./components/layoutt/DashboardLayout";
 
 const App = () => {
   return (

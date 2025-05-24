@@ -103,7 +103,7 @@
     overflow-x: auto;
   }
 
-   .admin-feature-modal .admin-form .ant-select {
+  .admin-feature-modal .admin-form .ant-select {
     width: 100% !important;
   }
 }

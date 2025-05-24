@@ -192,7 +192,7 @@ const Doctors = () => {
         onCancel={() => setShowModal(false)}
         footer={null} // removed default footer
         className="admin-modal"
-        width={700} 
+        width={700}
       >
         <Form
           layout="vertical"
@@ -214,7 +214,7 @@ const Doctors = () => {
             label="Last Name"
             rules={[{ required: true, message: "Last name is required!" }]}
           >
-            <Input  placeholder="Enter Last name"/>
+            <Input placeholder="Enter Last name" />
           </Form.Item>
           <Form.Item
             name="email"
@@ -235,16 +235,20 @@ const Doctors = () => {
             label="Specialization"
             rules={[{ required: true, message: "Specialization is required!" }]}
           >
-            <Input  placeholder="Enter Specialization"/>
+            <Input placeholder="Enter Specialization" />
           </Form.Item>
           <Form.Item
             name="address"
             label="Address"
             rules={[{ required: true, message: "Address is required!" }]}
           >
-            <Input  placeholder="Enter Address"/>
+            <Input placeholder="Enter Address" />
           </Form.Item>
-          <Form.Item name="features" label="Features" className="features-field">
+          <Form.Item
+            name="features"
+            label="Features"
+            className="features-field"
+          >
             <Select mode="multiple" allowClear placeholder="Select Features">
               {featureOptions.map((feature) => (
                 <Option key={feature.name} value={feature.name}>
@@ -260,7 +264,7 @@ const Doctors = () => {
             placeholder="Select Admin"
             rules={[{ required: true, message: "Admin name is required!" }]}
           >
-            <Select allowClear placeholder="Select Admin" >
+            <Select allowClear placeholder="Select Admin">
               {adminOptions.map((admin) => (
                 <Option key={admin} value={admin}>
                   {admin}

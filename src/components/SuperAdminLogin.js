@@ -1,12 +1,12 @@
 // SuperAdminLogin.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './styles/login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./styles/login.css";
 
 const SuperAdminLogin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -18,18 +18,21 @@ const SuperAdminLogin = () => {
       super_admin: {
         email,
         password,
-        otp_attempt: otp
-      }
+        otp_attempt: otp,
+      },
     };
 
     try {
-      const response = await fetch("https://api.staging.radiolinq.com/api/v1/super_admin/super_admins/sign_in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(loginData)
-      });
+      const response = await fetch(
+        "https://api.staging.radiolinq.com/api/v1/super_admin/super_admins/sign_in",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Invalid credentials or OTP.");
@@ -39,7 +42,6 @@ const SuperAdminLogin = () => {
       console.log("Login successful:", data);
       alert("Login successful!");
       navigate("/admin");
-
     } catch (error) {
       console.error("Login failed:", error);
       alert(error.message);
@@ -79,7 +81,7 @@ const SuperAdminLogin = () => {
             required
           />
           <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

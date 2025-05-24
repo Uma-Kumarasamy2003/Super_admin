@@ -1,8 +1,7 @@
-
 .login-container {
   display: flex;
   height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .left-panel {
@@ -26,7 +25,6 @@
   opacity: 0.85;
   font-weight: 600;
   letter-spacing: 3px;
-  
 }
 
 .right-panel {
@@ -70,7 +68,7 @@
 }
 .login-form input::placeholder {
   font-size: 0.7rem;
-  color:#ccc;
+  color: #ccc;
 }
 
 .login-form button {
@@ -84,7 +82,6 @@
   transition: background 0.3s ease;
   margin-top: 2%;
   width: 130%;
-
 }
 
 .login-form button:hover {

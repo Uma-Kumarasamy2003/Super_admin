@@ -10,8 +10,15 @@ const DashboardLayout = () => {
 
   return (
     <div className="layout-container">
-      <Sidebar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} collapsed={!sidebarOpen} />
-      <main className={`main-content ${sidebarOpen ? 'with-sidebar' : 'full-width'}`}>
+      <Sidebar
+        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        collapsed={!sidebarOpen}
+      />
+      <main
+        className={`main-content ${
+          sidebarOpen ? "with-sidebar" : "full-width"
+        }`}
+      >
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <div className="page-content">
           <Outlet />

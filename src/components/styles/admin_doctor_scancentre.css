@@ -73,7 +73,6 @@
   background-color: #f2f5f9;
 }
 
-
 .admin-form .ant-input:focus,
 .admin-form .ant-input-focused {
   border-color: #aeb6c0;
@@ -96,7 +95,6 @@
   border-color: #d9d9d9 !important;
   box-shadow: none !important;
 }
-
 
 /* Responsive */
 @media (max-width: 412px) {

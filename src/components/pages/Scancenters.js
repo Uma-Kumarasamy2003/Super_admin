@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import {
-  Table,
-  message,
-  Button,
-  Modal,
-  Form,
-  Input,
-} from "antd";
-import "../styles/scancentres.css";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, message, Button, Modal, Form, Input } from "antd";
+import "../styles/admin_doctor_scancentre.css";
 
 const Scancentres = () => {
   const [centres, setCentres] = useState(() => {
@@ -129,14 +118,20 @@ const Scancentres = () => {
         title={isEditMode ? "Edit Scan Centre" : "Add Scan Centre"}
         open={showModal}
         onCancel={() => setShowModal(false)}
-        onOk={handleFormSubmit}
-        okText={isEditMode ? "Update" : "Add"}
+        footer={null} // <- Remove default Cancel and OK buttons
+        className="admin-modal"
       >
-        <Form form={form} layout="vertical">
+        <Form
+          form={form}
+          layout="vertical"
+          requiredMark={false}
+          className="admin-form"
+          onFinish={handleFormSubmit}
+        >
           <Form.Item
             label="Name"
             name="name"
-            rules={[{ required: true, message: "Please enter the name" }]}
+            rules={[{ required: true, message: "Name is required!" }]}
           >
             <Input placeholder="Enter name" />
           </Form.Item>
@@ -144,7 +139,7 @@ const Scancentres = () => {
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Please enter the email" }]}
+            rules={[{ required: true, message: "Email is required!" }]}
           >
             <Input type="email" placeholder="Enter email" />
           </Form.Item>
@@ -152,7 +147,7 @@ const Scancentres = () => {
           <Form.Item
             label="Phone"
             name="phone"
-            rules={[{ required: true, message: "Please enter the phone number" }]}
+            rules={[{ required: true, message: "Phone number is required!" }]}
           >
             <Input placeholder="Enter phone" />
           </Form.Item>
@@ -160,9 +155,16 @@ const Scancentres = () => {
           <Form.Item
             label="Address"
             name="address"
-            rules={[{ required: true, message: "Please enter the address" }]}
+            rules={[{ required: true, message: "Address is required!" }]}
           >
             <Input placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item>
+            <div className="admin-form-button">
+              <Button type="primary" htmlType="submit">
+                {isEditMode ? "Update" : "Add"}
+              </Button>
+            </div>
           </Form.Item>
         </Form>
       </Modal>

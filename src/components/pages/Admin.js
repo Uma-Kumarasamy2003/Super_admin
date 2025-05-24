@@ -1,6 +1,6 @@
 // Admin.js
 import React, { useState, useEffect } from "react";
-import "../styles/admin_doctor.css";
+import "../styles/admin_doctor_scancentre.css";
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -189,22 +189,22 @@ const Admin = () => {
           className="admin-form"
         >
           <Form.Item label="First Name" name="firstName" rules={[{ required: true, message: "First name is required!" }]}>
-            <Input />
+            <Input placeholder="Enter First name" />
           </Form.Item>
           <Form.Item label="Last Name" name="lastName" rules={[{ required: true, message: "Last name is required!" }]}>
-            <Input />
+            <Input placeholder="Enter Last name" />
           </Form.Item>
           <Form.Item label="Email" name="email" rules={[{ required: true, type: "email", message: "Email is required!" }]}>
-            <Input />
+            <Input placeholder="Enter Email"/>
           </Form.Item>
           <Form.Item label="Phone" name="phone" rules={[{ required: true, message: "Phone number is required!"}]}>
-            <Input />
+            <Input placeholder="Enter Phone" />
           </Form.Item>
           <Form.Item label="Specialization" name="specialization" rules={[{ required: true, message: "Specialization is required!" }]}>
-            <Input />
+            <Input placeholder="Enter Specialization" />
           </Form.Item>
           <Form.Item label="Address" name="address" rules={[{ required: true, message: "Address is required!" }]}>
-            <Input />
+            <Input  placeholder="Enter Address"/>
           </Form.Item>
           <Form.Item label="Features" name="features" className="features-field">
             <Select

@@ -58,7 +58,7 @@ const AdminFeatures = () => {
       return;
     }
 
-    const featureObj = metadata.features.find(f => f.id === selectedFeature);
+    const featureObj = metadata.features.find((f) => f.id === selectedFeature);
     if (!featureObj) {
       message.error("Selected feature not found.");
       return;
@@ -75,7 +75,10 @@ const AdminFeatures = () => {
     setAdminData(updatedAdmins);
     localStorage.setItem("adminData", JSON.stringify(updatedAdmins));
 
-    setFeatures((prev) => [...prev, { featureId: featureObj.id, featureName: featureObj.name }]);
+    setFeatures((prev) => [
+      ...prev,
+      { featureId: featureObj.id, featureName: featureObj.name },
+    ]);
     setIsModalVisible(false);
     message.success("Feature added successfully.");
   };
@@ -132,7 +135,9 @@ const AdminFeatures = () => {
             value={selectedName}
             disabled
           >
-            {selectedName && <Option value={selectedName}>{selectedName}</Option>}
+            {selectedName && (
+              <Option value={selectedName}>{selectedName}</Option>
+            )}
           </Select>
         </div>
       </div>
@@ -155,12 +160,15 @@ const AdminFeatures = () => {
       <Modal
         title="Add Feature"
         open={isModalVisible}
-        onOk={handleAddFeature}
         onCancel={() => setIsModalVisible(false)}
-        okText="Add"
-        className="adminfeature-modal"
+        footer={null} // removed default footer
+        className="admin-feature-modal"
       >
-        <Form layout="vertical" className="adminfeature-form">
+        <Form
+          layout="vertical"
+          className="admin-form"
+          onFinish={handleAddFeature}
+        >
           <Form.Item label="Select Feature">
             <Select
               placeholder="Select feature"
@@ -173,6 +181,13 @@ const AdminFeatures = () => {
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item>
+            <div className="admin-form-button">
+              <Button type="primary" htmlType="submit">
+                Add
+              </Button>
+            </div>
           </Form.Item>
         </Form>
       </Modal>

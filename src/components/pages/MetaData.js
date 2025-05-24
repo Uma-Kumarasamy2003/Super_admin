@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/metadata.css";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import {
-  Table,
-  Button,
-  message,
-  Modal,
-  Form,
-  Input,
-} from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Button, message, Modal, Form, Input } from "antd";
 
 const MetaData = () => {
   const [openSection, setOpenSection] = useState(null);
@@ -197,11 +186,17 @@ const MetaData = () => {
           .charAt(0)
           .toUpperCase()}${modalType.slice(1)}`}
         open={showModal}
-        onOk={handleFormSubmit}
         onCancel={() => setShowModal(false)}
-        okText={isEditing ? "Update" : "Add"}
+        footer={null}
+        className="admin-modal"
       >
-        <Form form={form} layout="vertical" requiredMark={false}>
+        <Form
+          form={form}
+          layout="vertical"
+          requiredMark={false}
+          onFinish={handleFormSubmit}
+          className="admin-form"
+        >
           <Form.Item
             label="Name"
             name="name"
@@ -215,6 +210,13 @@ const MetaData = () => {
             rules={[{ required: true, message: "Please enter the ID" }]}
           >
             <Input placeholder="Enter ID" />
+          </Form.Item>
+          <Form.Item>
+            <div className="admin-form-button">
+              <Button type="primary" htmlType="submit">
+                {isEditing ? "Update" : "Add"}
+              </Button>
+            </div>
           </Form.Item>
         </Form>
       </Modal>

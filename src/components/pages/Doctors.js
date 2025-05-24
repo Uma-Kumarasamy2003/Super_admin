@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/admin_doctor.css";
+import "../styles/admin_doctor_scancentre.css";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Table, Select, message, Modal, Form, Input, Button } from "antd";
 
@@ -206,42 +206,42 @@ const Doctors = () => {
             label="First Name"
             rules={[{ required: true, message: "First name is required!" }]}
           >
-            <Input />
+            <Input placeholder="Enter First name" />
           </Form.Item>
           <Form.Item
             name="lastName"
             label="Last Name"
             rules={[{ required: true, message: "Last name is required!" }]}
           >
-            <Input />
+            <Input  placeholder="Enter Last name"/>
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
             rules={[{ required: true, message: "Email is required!" }]}
           >
-            <Input type="email" />
+            <Input type="email" placeholder="Enter Email" />
           </Form.Item>
           <Form.Item
             name="phone"
             label="Phone"
             rules={[{ required: true, message: "Phone number is required!" }]}
           >
-            <Input />
+            <Input placeholder="Enter Phone" />
           </Form.Item>
           <Form.Item
             name="specialization"
             label="Specialization"
             rules={[{ required: true, message: "Specialization is required!" }]}
           >
-            <Input />
+            <Input  placeholder="Enter Specialization"/>
           </Form.Item>
           <Form.Item
             name="address"
             label="Address"
             rules={[{ required: true, message: "Address is required!" }]}
           >
-            <Input />
+            <Input  placeholder="Enter Address"/>
           </Form.Item>
           <Form.Item name="features" label="Features" className="features-field">
             <Select mode="multiple" allowClear placeholder="Select Features">

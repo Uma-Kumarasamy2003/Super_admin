@@ -1,7 +1,20 @@
+// Admin.js
 import React, { useState, useEffect } from "react";
 import "../styles/admin_doctor.css";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table, Select, message } from "antd";
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
+import {
+  Table,
+  Select,
+  message,
+  Modal,
+  Form,
+  Input,
+  Button,
+} from "antd";
 
 const { Option } = Select;
 
@@ -27,6 +40,8 @@ const Admin = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
+  const [form] = Form.useForm();
+
   useEffect(() => {
     localStorage.setItem("adminData", JSON.stringify(adminData));
   }, [adminData]);
@@ -37,23 +52,6 @@ const Admin = () => {
       setFeatureOptions(JSON.parse(storedFeatures));
     }
   }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedAdmin = { ...newAdmin, [name]: value };
-
-    if (name === "firstName" || name === "lastName") {
-      updatedAdmin.name = `${updatedAdmin.firstName || ""} ${
-        updatedAdmin.lastName || ""
-      }`.trim();
-    }
-
-    setNewAdmin(updatedAdmin);
-  };
-
-  const handleFeatureSelect = (value) => {
-    setNewAdmin({ ...newAdmin, features: value });
-  };
 
   const openAddModal = () => {
     setNewAdmin({
@@ -68,26 +66,24 @@ const Admin = () => {
     });
     setIsEditMode(false);
     setShowModal(true);
+    form.resetFields();
   };
 
   const handleAddOrUpdateAdmin = () => {
-    const { name, email, phone, specialization, address } = newAdmin;
+    const values = form.getFieldsValue();
+    const name = `${values.firstName} ${values.lastName}`.trim();
 
-    if (!name || !email || !phone || !specialization || !address) {
-      alert("Please fill in all fields.");
-      return;
-    }
+    const adminEntry = { ...values, name };
 
     if (!isEditMode) {
       const duplicate = adminData.find(
-        (admin) => admin.email === email || admin.phone === phone
+        (admin) => admin.email === values.email || admin.phone === values.phone
       );
       if (duplicate) {
-        alert("Email or phone already exists.");
+        message.error("Email or phone already exists.");
         return;
       }
 
-      // Generate next sequential ADM ID
       const maxIdNumber = adminData.reduce((max, admin) => {
         const match = admin.id?.match(/^ADM(\d+)$/);
         const num = match ? parseInt(match[1], 10) : 0;
@@ -95,40 +91,32 @@ const Admin = () => {
       }, 0);
 
       const newId = `ADM${maxIdNumber + 1}`;
-      setAdminData([...adminData, { ...newAdmin, id: newId }]);
+      setAdminData([...adminData, { ...adminEntry, id: newId }]);
       message.success("Admin added successfully!");
     } else {
       const updatedData = adminData.map((admin) =>
-        admin.id === editingId ? { ...newAdmin, id: editingId } : admin
+        admin.id === editingId ? { ...adminEntry, id: editingId } : admin
       );
       setAdminData(updatedData);
       message.success("Admin updated successfully!");
     }
 
     setShowModal(false);
-    setNewAdmin({
-      firstName: "",
-      lastName: "",
-      name: "",
-      email: "",
-      phone: "",
-      specialization: "",
-      address: "",
-      features: [],
-    });
     setEditingId(null);
+    form.resetFields();
   };
 
   const handleEdit = (record) => {
     const [firstName, ...lastParts] = record.name.split(" ");
     const lastName = lastParts.join(" ");
-
-    setNewAdmin({
+    const updatedAdmin = {
       ...record,
       firstName,
       lastName,
-    });
+    };
 
+    form.setFieldsValue(updatedAdmin);
+    setNewAdmin(updatedAdmin);
     setEditingId(record.id);
     setIsEditMode(true);
     setShowModal(true);
@@ -137,7 +125,7 @@ const Admin = () => {
   const handleDelete = (id) => {
     const filtered = adminData.filter((admin) => admin.id !== id);
     setAdminData(filtered);
-    message.success("Admin added successfully!");
+    message.success("Admin deleted successfully!");
   };
 
   const columns = [
@@ -170,9 +158,9 @@ const Admin = () => {
     <div className="admin-container">
       <div className="admin-header">
         <h2>Admins</h2>
-        <button className="add-admin-btn" onClick={openAddModal}>
-          <PlusOutlined style={{ paddingRight: "5px" }} /> Add Admin
-        </button>
+        <Button type="primary" htmlType="submit" onClick={openAddModal}>
+               <PlusOutlined /> Add Admin
+        </Button>
       </div>
 
       <div style={{ overflowX: "auto" }}>
@@ -184,92 +172,63 @@ const Admin = () => {
         />
       </div>
 
-      {showModal && (
-        <div className="modal-overlay-admin-doctor">
-          <div className="modal">
-            <h3>{isEditMode ? "Edit Admin" : "Add Admin"}</h3>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={newAdmin.firstName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={newAdmin.lastName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={newAdmin.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={newAdmin.phone}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Specialization</label>
-                <input
-                  type="text"
-                  name="specialization"
-                  value={newAdmin.specialization}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={newAdmin.address}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group full-width">
-                <label>Features</label>
-                <Select
-                  mode="multiple"
-                  allowClear
-                  placeholder="Select Features"
-                  value={newAdmin.features}
-                  onChange={handleFeatureSelect}
-                  style={{ width: "100%" }}
-                >
-                  {featureOptions.map((feature) => (
-                    <Option key={feature.name} value={feature.name}>
-                      {feature.name}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
+      <Modal
+        title={isEditMode ? "Edit Admin" : "Add Admin"}
+        open={showModal}
+        onCancel={() => setShowModal(false)}
+        footer={null}
+        destroyOnClose
+        className="admin-modal"
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={newAdmin}
+          onFinish={handleAddOrUpdateAdmin}
+          requiredMark={false}
+          className="admin-form"
+        >
+          <Form.Item label="First Name" name="firstName" rules={[{ required: true, message: "First name is required!" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Last Name" name="lastName" rules={[{ required: true, message: "Last name is required!" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Email" name="email" rules={[{ required: true, type: "email", message: "Email is required!" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Phone" name="phone" rules={[{ required: true, message: "Phone number is required!"}]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Specialization" name="specialization" rules={[{ required: true, message: "Specialization is required!" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Address" name="address" rules={[{ required: true, message: "Address is required!" }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Features" name="features" className="features-field">
+            <Select
+              mode="multiple"
+              allowClear
+              placeholder="Select Features"
+              onChange={(value) => setNewAdmin({ ...newAdmin, features: value })}
+            >
+              {featureOptions.map((feature) => (
+                <Option key={feature.name} value={feature.name}>
+                  {feature.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <div className="admin-form-button">
+            <Button type="primary" htmlType="submit" className="admin-form-button">
+              {isEditMode ? "Update" : "Add"}
+            </Button>
             </div>
-            <div className="modal-buttons">
-              <button onClick={handleAddOrUpdateAdmin}>
-                {isEditMode ? "Update" : "Add"}
-              </button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

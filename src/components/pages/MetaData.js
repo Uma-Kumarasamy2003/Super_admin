@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../styles/metadata.css";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Table, Button, message } from "antd"; // ✅ message added
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import {
+  Table,
+  Button,
+  message,
+  Modal,
+  Form,
+  Input,
+} from "antd";
 
 const MetaData = () => {
   const [openSection, setOpenSection] = useState(null);
@@ -35,9 +46,10 @@ const MetaData = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [newItem, setNewItem] = useState({ name: "", id: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+
+  const [form] = Form.useForm();
 
   useEffect(() => {
     localStorage.setItem("features", JSON.stringify(features));
@@ -51,7 +63,7 @@ const MetaData = () => {
 
   const openAddModal = (type) => {
     setModalType(type);
-    setNewItem({ name: "", id: "" });
+    form.resetFields();
     setIsEditing(false);
     setEditIndex(null);
     setShowModal(true);
@@ -59,56 +71,39 @@ const MetaData = () => {
 
   const openEditModal = (item, index, type) => {
     setModalType(type);
-    setNewItem({ ...item });
+    form.setFieldsValue(item);
     setIsEditing(true);
     setEditIndex(index);
     setShowModal(true);
   };
 
-  const handleAddItem = () => {
-    if (!newItem.name || !newItem.id) {
-      message.warning("Please enter both Name and ID.");
-      return;
+  const handleFormSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+
+      const updated =
+        modalType === "features"
+          ? [...features]
+          : modalType === "bodyParts"
+          ? [...bodyParts]
+          : [...scanTypes];
+
+      if (isEditing) {
+        updated[editIndex] = values;
+        message.success("Updated successfully!");
+      } else {
+        updated.push(values);
+        message.success("Added successfully!");
+      }
+
+      if (modalType === "features") setFeatures(updated);
+      else if (modalType === "bodyParts") setBodyParts(updated);
+      else if (modalType === "scanTypes") setScanTypes(updated);
+
+      setShowModal(false);
+    } catch (err) {
+      console.log("Validation Failed:", err);
     }
-
-    const updated =
-      modalType === "features"
-        ? [...features, newItem]
-        : modalType === "bodyParts"
-        ? [...bodyParts, newItem]
-        : [...scanTypes, newItem];
-
-    if (modalType === "features") setFeatures(updated);
-    else if (modalType === "bodyParts") setBodyParts(updated);
-    else if (modalType === "scanTypes") setScanTypes(updated);
-
-    message.success("Added successfully!");
-    setShowModal(false);
-  };
-
-  const handleUpdateItem = () => {
-    if (!newItem.name || !newItem.id) {
-      message.warning("Please enter both Name and ID.");
-      return;
-    }
-
-    const updated =
-      modalType === "features"
-        ? [...features]
-        : modalType === "bodyParts"
-        ? [...bodyParts]
-        : [...scanTypes];
-
-    updated[editIndex] = newItem;
-
-    if (modalType === "features") setFeatures(updated);
-    else if (modalType === "bodyParts") setBodyParts(updated);
-    else if (modalType === "scanTypes") setScanTypes(updated);
-
-    message.success("Updated successfully!");
-    setShowModal(false);
-    setIsEditing(false);
-    setEditIndex(null);
   };
 
   const handleDeleteItem = (index, type) => {
@@ -197,51 +192,32 @@ const MetaData = () => {
         ))}
       </div>
 
-      {showModal && (
-        <div className="modal-overlay-metadata">
-          <div className="modal">
-            <h3>
-              {isEditing ? "Edit" : "Add"}{" "}
-              {modalType.charAt(0).toUpperCase() + modalType.slice(1)}
-            </h3>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="item-name">Name</label>
-                <input
-                  id="item-name"
-                  type="text"
-                  placeholder="Enter Name"
-                  value={newItem.name}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, name: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="item-id">ID</label>
-                <input
-                  id="item-id"
-                  type="text"
-                  placeholder="Enter ID"
-                  value={newItem.id}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, id: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className="modal-buttons">
-              <Button
-                type="primary"
-                onClick={isEditing ? handleUpdateItem : handleAddItem}
-              >
-                {isEditing ? "Update" : "Add"}
-              </Button>
-              <Button onClick={() => setShowModal(false)}>Cancel</Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        title={`${isEditing ? "Edit" : "Add"} ${modalType
+          .charAt(0)
+          .toUpperCase()}${modalType.slice(1)}`}
+        open={showModal}
+        onOk={handleFormSubmit}
+        onCancel={() => setShowModal(false)}
+        okText={isEditing ? "Update" : "Add"}
+      >
+        <Form form={form} layout="vertical" requiredMark={false}>
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please enter the name" }]}
+          >
+            <Input placeholder="Enter Name" />
+          </Form.Item>
+          <Form.Item
+            label="ID"
+            name="id"
+            rules={[{ required: true, message: "Please enter the ID" }]}
+          >
+            <Input placeholder="Enter ID" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

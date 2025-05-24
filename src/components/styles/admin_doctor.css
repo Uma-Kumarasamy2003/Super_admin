@@ -19,122 +19,84 @@
   margin: 0;
 }
 
-.add-admin-btn {
-  background-color: #085cda;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 540;
-  transition: background-color 0.3s;
-}
-
-.add-admin-btn:hover {
-  background-color: #003eaa;
-}
-
-.modal-overlay-admin-doctor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-overlay-admin-doctor .modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 50%;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-overlay-admin-doctor .modal h3 {
-  margin-bottom: 2rem;
+.admin-modal .ant-modal-title {
   color: #085cda;
-  font-size: 1.25rem;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
-/* Modal Action Buttons */
-.modal-buttons {
+.admin-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+  gap: 0px 30px; /* Space between columns */
+}
+
+.admin-form .ant-input,
+.admin-form .ant-select,
+.admin-form .ant-picker {
+  width: 100%;
+}
+
+.admin-form .ant-form-item:last-child {
+  grid-column: span 2;
+}
+
+.admin-modal .ant-modal-content {
+  max-width: 90vw;
+  width: 800px;
+}
+
+.admin-form-button {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
+  justify-content: flex-end; /* Aligns the button to the right */
+  margin-bottom: 0px auto;
 }
 
-.modal-buttons button {
-  margin-left: 10px;
-  padding: 8px 16px;
-  border: none;
-  background-color: #085cda;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
+.admin-modal .ant-modal-content {
+  padding-bottom: 0.5rem; /* Reduce from default 24px or more */
+}
+
+/* Change color of form labels */
+.admin-form .ant-form-item-label > label {
+  color: #babdc2; /* Change to any color you want */
+  font-weight: 600; /* Optional: make the label bolder */
+}
+
+/* Style for inputs inside the admin form */
+.admin-form .ant-input,
+.features-field .ant-select .ant-select-selector {
+  border-radius: 6px;
+  padding: 8px 12px;
   font-size: 14px;
+  color: #333;
+  background-color: #f2f5f9;
 }
 
-.modal-buttons button:hover {
-  background-color: #003eaa;
+
+.admin-form .ant-input:focus,
+.admin-form .ant-input-focused {
+  border-color: #aeb6c0;
 }
 
-/* Grid layout for the modal form */
-.modal-overlay-admin-doctor .form-grid {
-  display: grid !important;
-  margin-right: 20px !important;
-  margin-left: 20px !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 20px 40px !important;
+/* Optional: Disabled input style */
+.admin-form .ant-input[disabled] {
+  background-color: #f5f5f5;
+  color: #999;
 }
 
-.modal-overlay-admin-doctor .form-grid .form-group {
-  flex: 1 1 45% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100% !important;
+/* Remove red border on validation error */
+.admin-form .ant-form-item-has-error .ant-input {
+  border-color: #d9d9d9 !important; /* default border color */
+  box-shadow: none !important;
 }
 
-.form-group label {
-  font-weight: 500;
-  margin-bottom: 2px;
-  font-size: 14px;
-  color: #767575;
+/* Optional: also for Select box */
+.admin-form .ant-form-item-has-error .ant-select-selector {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
 }
 
-.form-group input {
-  padding: 10px 12px !important;
-  font-size: 14px !important;
-  border-radius: 4px !important;
-  border: 1px solid #cfd6e1 !important;
-  background-color: #e4e9f1 !important;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
-  box-sizing: border-box;
-  
-}
-
-.form-group .ant-select-selector {
-  font-size: 14px !important;
-  border-radius: 4px !important;
-  border: 1px solid #cfd6e1 !important;
-  background-color: #e4e9f1 !important;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
-}
-
-input:focus,
-.form-group select:focus {
-  border-color: #085cda;
-  box-shadow: 0 0 0 2px rgba(8, 92, 218, 0.2);
-  background-color: #e6edf8;
-}
 
 /* Responsive */
 @media (max-width: 412px) {
@@ -145,63 +107,31 @@ input:focus,
   .admin-header h2 {
     font-size: 20px;
   }
-
-  .add-admin-btn {
-    width: 100px;
-    font-size: 10px;
-    margin-right: 0px;
+  .admin-modal .ant-modal-content {
+    max-height: 90vh; /* Limit height to 90% of viewport height */
+    overflow-y: auto;
+    max-width: 360px; /* Enable vertical scroll if needed */
   }
 
-  .modal-overlay-admin-doctor .modal {
-    width: 80% !important;
-    height: 60% !important;
-    margin-top: 40%;
-    margin: 20px;
-  }
-
-  .modal-overlay-admin-doctor .form-grid {
-    grid-template-columns: 1fr !important;
-    flex-direction: column;
-  }
-
-  .modal-overlay-admin-doctor .form-group {
-    width: 100%;
-    
-  }
-  .form-group input,
-  .form-group .ant-select,
-  .form-group .ant-select-selector {
+  .features-field .ant-select {
     width: 100% !important;
-    box-sizing: border-box;
+  }
+}
 
+/* Default for mobile (stacked layout) */
+.admin-form {
+  display: block;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .admin-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px 20px;
   }
 
-  .modal-overlay-admin-doctor .form-group input {
-    font-size: 13px;
-    padding: 8px 10px;
-  }
-
-  .form-group label {
-    flex-shrink: 0;
-    font-size: 20px;
-    min-width: 90px;
-  }
-
-  .modal-buttons {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-    
-  }
-
-  .modal-buttons button {
-    width: 20%;
-    font-size: 14px;
-    padding: 10px;
-    margin-top: 5px
-  }
-
-  .modal h3 {
-    font-size: 1.2rem;
+  .admin-form .ant-form-item:last-child {
+    grid-column: span 2;
   }
 }

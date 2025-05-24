@@ -228,7 +228,8 @@
 .edit-modal .ant-modal-title{
   color: #085cda;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 /* Increase modal width and height */

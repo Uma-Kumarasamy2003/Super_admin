@@ -426,6 +426,7 @@ const Cases = () => {
         footer={null}
         destroyOnClose
         className="edit-modal"
+        
       >
         <Form
           form={form}
@@ -433,6 +434,7 @@ const Cases = () => {
           onFinish={onFinish}
           initialValues={editingRecord || {}}
           className="edit-form-grid"
+          requiredMark={false}
         >
           <Form.Item
             name="tags"
@@ -529,11 +531,7 @@ const Cases = () => {
 
           <Form.Item>
             <div className="update-button">
-              <Button
-                type="primary"
-                htmlType="submit"
-                
-              >
+              <Button type="primary" htmlType="submit">
                 Update
               </Button>
             </div>

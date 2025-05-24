@@ -189,6 +189,7 @@ const MetaData = () => {
         onCancel={() => setShowModal(false)}
         footer={null}
         className="admin-modal"
+        width={700} 
       >
         <Form
           form={form}

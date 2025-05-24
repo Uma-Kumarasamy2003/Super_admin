@@ -120,6 +120,7 @@ const Scancentres = () => {
         onCancel={() => setShowModal(false)}
         footer={null} // <- Remove default Cancel and OK buttons
         className="admin-modal"
+        width={700} 
       >
         <Form
           form={form}

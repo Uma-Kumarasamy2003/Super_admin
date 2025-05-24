@@ -179,6 +179,7 @@ const Admin = () => {
         footer={null}
         destroyOnClose
         className="admin-modal"
+        width={700} 
       >
         <Form
           form={form}

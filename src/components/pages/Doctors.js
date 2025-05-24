@@ -192,6 +192,7 @@ const Doctors = () => {
         onCancel={() => setShowModal(false)}
         footer={null} // removed default footer
         className="admin-modal"
+        width={700} 
       >
         <Form
           layout="vertical"
